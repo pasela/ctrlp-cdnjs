@@ -1,7 +1,7 @@
 ctrlp-cdnjs
 ===========
 
-CtrlP extension for `cdnjs.com`. Default action is `lcd`.
+CtrlP extension for `cdnjs.com`.
 
 Usage
 -----
@@ -16,10 +16,23 @@ If may add map into your vimrc like below: >
 noremap <leader>js :<c-u>CtrlPCdnJs<cr>
 ```
 
-## License
+Requirements
+------------
+
+- [webapi](https://github.com/mattn/webapi-vim)
+
+ToDo
+----
+
+- Choose raw URL or script tag
+- Choose http or https (or protocol-less)
+
+License
+-------
 
 MIT
 
-## Author
+Author
+------
 
 Yuki (a.k.a pasela)
