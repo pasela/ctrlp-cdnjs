@@ -18,6 +18,7 @@ let s:protocol = [
 
 let s:cdnjs_var = {
 \  'init':   'ctrlp#cdnjs#init()',
+\  'enter':  'ctrlp#cdnjs#enter()',
 \  'exit':   'ctrlp#cdnjs#exit()',
 \  'accept': 'ctrlp#cdnjs#accept',
 \  'lname':  'cdnjs',
@@ -55,10 +56,6 @@ function! ctrlp#cdnjs#accept(mode, str)
   call ctrlp#exit()
 
   let url = substitute(library.latest, '^http:', s:protocol[g:ctrlp_cdnjs_protocol][1], '')
-
-  let reg_x = getreg('x', 1, 1)
-  let reg_x_type = getregtype('x')
-
   if a:mode == 't'
     if g:ctrlp_cdnjs_script_type
       let attr = printf('type="text/javascript" src="%s"', url)
@@ -66,20 +63,31 @@ function! ctrlp#cdnjs#accept(mode, str)
       let attr = printf('src="%s"', url)
     endif
     let url = printf('<script %s></script>', attr)
-    call setreg('x', url, 'l')
-    execute 'normal! "xp'
-  else
-    call setreg('x', url, 'c')
-    execute 'normal! "x' . (col('$') - col('.') <= 1 ? 'p' : 'P')
-  endif
 
-  call setreg('x', reg_x, reg_x_type)
+    call append(line('.'), url)
+    let curpos     = copy(s:curpos)
+    let curpos[1] += 1
+    call setpos('.', curpos)
+  else
+    let line       = getline('.')
+    let pos        = s:curpos[2] - 1
+    let line       = line[: pos-1] . url . line[pos :]
+    call setline('.', line)
+
+    let curpos     = copy(s:curpos)
+    let curpos[2] += len(url)
+    call setpos('.', curpos)
+  endif
 endfunction
 
 function! ctrlp#cdnjs#exit()
   if exists('s:list')
     unlet! s:list
   endif
+endfunction
+
+function! ctrlp#cdnjs#enter()
+  let s:curpos = getpos('.')
 endfunction
 
 let s:id = ctrlp#getvar('g:ctrlp_builtins') + len(g:ctrlp_ext_vars)
