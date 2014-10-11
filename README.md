@@ -2,6 +2,7 @@ ctrlp-cdnjs
 ===========
 
 CtrlP extension for `cdnjs.com`.
+Select and insert the library URL/script tag.
 
 Usage
 -----
@@ -15,6 +16,24 @@ If may add map into your vimrc like below: >
 ```vim
 noremap <leader>js :<c-u>CtrlPCdnJs<cr>
 ```
+
+In CtrlP window,
+
+`<CR>` inserts the URL.
+`<C-t>` inserts the script tag.
+
+`<C-s>`, `<C-x>`, `<C-CR>` rotate URL's protocol.
+
+    http -> https -> protocol-less -> http -> ...
+
+Variables
+---------
+
+`g:ctrlp_cdnjs_protocol` is current protocol. (default=1)
+
+    0 = protocol-less
+    1 = http
+    2 = https
 
 Requirements
 ------------
