@@ -34,9 +34,15 @@ endfunc
 function! ctrlp#cdnjs#accept(mode, str)
   let library = filter(copy(s:list), 'v:val.name == split(a:str)[0]')[0]
   call ctrlp#exit()
+
+  let url = library.latest
+  if a:mode == 't'
+    let url = printf('<script type="text/javascript" src="%s"></script>', url)
+  endif
+
   let reg_x = getreg('x', 1, 1)
   let reg_x_type = getregtype('x')
-  call setreg('x', library.latest)
+  call setreg('x', url, a:mode == 't' ? 'l' : 'c')
   execute 'normal! "x' . (col('$') - col('.') <= 1 ? 'p' : 'P')
   call setreg('x', reg_x, reg_x_type)
 endfunction
