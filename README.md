@@ -47,6 +47,9 @@ Variables
     default:
     <link rel="stylesheet" type="text/css" href="${url}">
 
+`g:ctrlp_cdnjs_indent_tag` is auto indent flag. (default=1)
+If this value is 1, the inserted tag is indented automatically.
+
 Requirements
 ------------
 

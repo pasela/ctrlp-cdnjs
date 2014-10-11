@@ -12,6 +12,9 @@ endif
 if !exists('g:ctrlp_cdnjs_css_link_tag')
   let g:ctrlp_cdnjs_css_link_tag = '<link rel="stylesheet" type="text/css" href="${url}">'
 endif
+if !exists('g:ctrlp_cdnjs_indent_tag')
+  let g:ctrlp_cdnjs_indent_tag = 1
+endif
 
 let s:protocol = [
 \   ['protocol-less', ''      ],
@@ -71,6 +74,9 @@ function! s:insert_tag(url)
   let curpos     = copy(s:curpos)
   let curpos[1] += 1
   call setpos('.', curpos)
+  if g:ctrlp_cdnjs_indent_tag
+    normal ==
+  endif
 endfunction
 
 function! s:compare_libname(lib1, lib2)
