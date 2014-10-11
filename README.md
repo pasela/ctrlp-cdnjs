@@ -66,7 +66,8 @@ ToDo
 ----
 
 - Select version
-- Multiple files
+- Multiple asset files
+- Multiple select
 
 Thanks
 ------
