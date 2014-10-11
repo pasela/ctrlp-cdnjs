@@ -74,6 +74,31 @@ function! s:get_ext(url)
   return fnamemodify(a:url, ':e')
 endfunction
 
+function! s:insert_url(url)
+  let line       = getline('.')
+  let pos        = s:curpos[2] - 1
+  let line       = line[: pos-1] . a:url . line[pos :]
+  call setline('.', line)
+
+  let curpos     = copy(s:curpos)
+  let curpos[2] += len(a:url)
+  call setpos('.', curpos)
+endfunction
+
+function! s:insert_tag(url)
+  let ext = s:get_ext(a:url)
+  if ext ==? 'js'
+    let tag = s:create_script_tag(a:url)
+  elseif ext ==? 'css'
+    let tag = s:create_css_link_tag(a:url)
+  endif
+
+  call append(line('.'), tag)
+  let curpos     = copy(s:curpos)
+  let curpos[1] += 1
+  call setpos('.', curpos)
+endfunction
+
 function! s:compare_libname(lib1, lib2)
   return a:lib1.name ==? a:lib2.name ? 0 : a:lib1.name >? a:lib2.name ? 1 : -1
 endfunction
@@ -98,26 +123,9 @@ function! ctrlp#cdnjs#accept(mode, str)
 
   let url = substitute(library.latest, '^http:', s:protocol[g:ctrlp_cdnjs_protocol][1], '')
   if a:mode == 't'
-    let ext = s:get_ext(url)
-    if ext ==? 'js'
-      let tag = s:create_script_tag(url)
-    elseif ext ==? 'css'
-      let tag = s:create_css_link_tag(url)
-    endif
-
-    call append(line('.'), tag)
-    let curpos     = copy(s:curpos)
-    let curpos[1] += 1
-    call setpos('.', curpos)
+    call s:insert_tag(url)
   else
-    let line       = getline('.')
-    let pos        = s:curpos[2] - 1
-    let line       = line[: pos-1] . url . line[pos :]
-    call setline('.', line)
-
-    let curpos     = copy(s:curpos)
-    let curpos[2] += len(url)
-    call setpos('.', curpos)
+    call s:insert_url(url)
   endif
 endfunction
 
