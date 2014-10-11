@@ -35,11 +35,17 @@ Variables
     1 = http
     2 = https
 
-`g:ctrlp_cdnjs_script_type` specifies whether to include
-`type="text/javascript"` in the script tag. (default=1)
+`g:ctrlp_cdnjs_script_tag` is a template of script tag.
+`${url}` is replaced with the URL.
 
-`g:ctrlp_cdnjs_css_type` specifies whether to include
-`type="text/css"` in the link tag. (default=1)
+    default:
+    <script type="text/javascript" src="${url}"></script>
+
+`g:ctrlp_cdnjs_css_link_tag` is a template of link tag.
+`${url}` is replaced with the URL.
+
+    default:
+    <link rel="stylesheet" type="text/css" href="${url}">
 
 Requirements
 ------------
