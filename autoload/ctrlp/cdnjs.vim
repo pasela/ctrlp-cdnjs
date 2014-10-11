@@ -33,6 +33,22 @@ else
   let g:ctrlp_ext_vars = [s:cdnjs_var]
 endif
 
+function! s:create_tag(name, content, attrs)
+  let tag_attrs = [a:name]
+  if !empty(a:attrs)
+    let tag_attrs = extend(tag_attrs, a:attrs)
+  endif
+  return printf('<%s>%s</%s>', join(tag_attrs, ' '), a:content, a:name)
+endfunction
+
+function! s:create_script_tag(url)
+  let attrs = [printf('src="%s"', a:url)]
+  if g:ctrlp_cdnjs_script_type
+    let attrs = insert(attrs, 'type="text/javascript"')
+  endif
+  return s:create_tag('script', '', attrs)
+endfunction
+
 function! s:compare_libname(lib1, lib2)
   return a:lib1.name ==? a:lib2.name ? 0 : a:lib1.name >? a:lib2.name ? 1 : -1
 endfunction
@@ -57,14 +73,9 @@ function! ctrlp#cdnjs#accept(mode, str)
 
   let url = substitute(library.latest, '^http:', s:protocol[g:ctrlp_cdnjs_protocol][1], '')
   if a:mode == 't'
-    if g:ctrlp_cdnjs_script_type
-      let attr = printf('type="text/javascript" src="%s"', url)
-    else
-      let attr = printf('src="%s"', url)
-    endif
-    let url = printf('<script %s></script>', attr)
+    let tag = s:create_script_tag(url)
 
-    call append(line('.'), url)
+    call append(line('.'), tag)
     let curpos     = copy(s:curpos)
     let curpos[1] += 1
     call setpos('.', curpos)
