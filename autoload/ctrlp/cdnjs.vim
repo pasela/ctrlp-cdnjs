@@ -3,8 +3,8 @@ if get(g:, 'loaded_ctrlp_cdnjs', 0)
 endif
 let g:loaded_ctrlp_cdnjs = 1
 
-if !exists('g:ctrlp_cdnjs_protocol')
-  let g:ctrlp_cdnjs_protocol = 1
+if !exists('g:ctrlp_cdnjs_scheme')
+  let g:ctrlp_cdnjs_scheme = 1
 endif
 if !exists('g:ctrlp_cdnjs_script_tag')
   let g:ctrlp_cdnjs_script_tag = '<script type="text/javascript" src="${url}"></script>'
@@ -16,10 +16,10 @@ if !exists('g:ctrlp_cdnjs_indent_tag')
   let g:ctrlp_cdnjs_indent_tag = 1
 endif
 
-let s:protocol = [
-\   ['protocol-less', ''      ],
-\   ['http',          'http:' ],
-\   ['https',         'https:'],
+let s:scheme = [
+\   ['scheme-less', ''      ],
+\   ['http',        'http:' ],
+\   ['https',       'https:'],
 \]
 
 let s:cdnjs_var = {
@@ -105,15 +105,15 @@ endfunc
 
 function! ctrlp#cdnjs#accept(mode, str)
   if a:mode == 'h'
-    let g:ctrlp_cdnjs_protocol = (g:ctrlp_cdnjs_protocol + 1) % len(s:protocol)
-    echo s:protocol[g:ctrlp_cdnjs_protocol][0]
+    let g:ctrlp_cdnjs_scheme = (g:ctrlp_cdnjs_scheme + 1) % len(s:scheme)
+    echo s:scheme[g:ctrlp_cdnjs_scheme][0]
     return
   endif
 
   let library = filter(copy(s:list), 'v:val.name == split(a:str)[0]')[0]
   call ctrlp#exit()
 
-  let url = substitute(library.latest, '^http:', s:protocol[g:ctrlp_cdnjs_protocol][1], '')
+  let url = substitute(library.latest, '^http:', s:scheme[g:ctrlp_cdnjs_scheme][1], '')
   if a:mode == 't'
     call s:insert_tag(url)
   elseif a:mode == 'v'

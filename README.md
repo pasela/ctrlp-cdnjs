@@ -26,16 +26,16 @@ In CtrlP window,
 This function requires open-browser.vim
 (see: https://github.com/tyru/open-browser.vim)
 
-`<C-s>`, `<C-x>`, `<C-CR>` rotate URL's protocol.
+`<C-s>`, `<C-x>`, `<C-CR>` rotate URL's scheme.
 
-    http -> https -> protocol-less -> http -> ...
+    http -> https -> scheme-less -> http -> ...
 
 Variables
 ---------
 
-`g:ctrlp_cdnjs_protocol` is current protocol. (default=1)
+`g:ctrlp_cdnjs_scheme` is current scheme. (default=1)
 
-    0 = protocol-less
+    0 = scheme-less (protocol relative)
     1 = http
     2 = https
 
