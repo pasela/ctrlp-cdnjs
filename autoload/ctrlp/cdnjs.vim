@@ -6,11 +6,11 @@ let g:loaded_ctrlp_cdnjs = 1
 if !exists('g:ctrlp_cdnjs_protocol')
   let g:ctrlp_cdnjs_protocol = 1
 endif
-if !exists('g:ctrlp_cdnjs_script_type')
-  let g:ctrlp_cdnjs_script_type = 1
+if !exists('g:ctrlp_cdnjs_script_tag')
+  let g:ctrlp_cdnjs_script_tag = '<script type="text/javascript" src="${url}"></script>'
 endif
-if !exists('g:ctrlp_cdnjs_css_type')
-  let g:ctrlp_cdnjs_css_type = 1
+if !exists('g:ctrlp_cdnjs_css_link_tag')
+  let g:ctrlp_cdnjs_css_link_tag = '<link rel="stylesheet" type="text/css" href="${url}">'
 endif
 
 let s:protocol = [
@@ -36,38 +36,12 @@ else
   let g:ctrlp_ext_vars = [s:cdnjs_var]
 endif
 
-function! s:create_tag(name, content, attrs, close_style)
-  let tag_attrs = [a:name]
-  if !empty(a:attrs)
-    let tag_attrs = extend(tag_attrs, a:attrs)
-  endif
-
-  if len(a:content) == 0 && a:close_style == 'empty'
-    return printf('<%s />', join(tag_attrs, ' '))
-  elseif len(a:content) == 0 && a:close_style == 'omit'
-    return printf('<%s>', join(tag_attrs, ' '))
-  else
-    return printf('<%s>%s</%s>', join(tag_attrs, ' '), a:content, a:name)
-  endif
-endfunction
-
 function! s:create_script_tag(url)
-  let attrs = [printf('src="%s"', a:url)]
-  if g:ctrlp_cdnjs_script_type
-    let attrs = insert(attrs, 'type="text/javascript"')
-  endif
-  return s:create_tag('script', '', attrs, '')
+  return substitute(g:ctrlp_cdnjs_script_tag, '\${url}', a:url, 'g')
 endfunction
 
 function! s:create_css_link_tag(url)
-  let attrs = [
-  \   'rel="stylesheet"',
-  \   printf('href="%s"', a:url),
-  \]
-  if g:ctrlp_cdnjs_css_type
-    let attrs = insert(attrs, 'type="text/css"', 1)
-  endif
-  return s:create_tag('link', '', attrs, 'empty')
+  return substitute(g:ctrlp_cdnjs_css_link_tag, '\${url}', a:url, 'g')
 endfunction
 
 function! s:get_ext(url)
