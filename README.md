@@ -38,10 +38,19 @@ Variables
 `g:ctrlp_cdnjs_script_type` specifies whether to include
 `type="text/javascript"` in the script tag. (default=1)
 
+`g:ctrlp_cdnjs_css_type` specifies whether to include
+`type="text/css"` in the link tag. (default=1)
+
 Requirements
 ------------
 
 - [webapi](https://github.com/mattn/webapi-vim)
+
+ToDo
+----
+
+- Select version
+- Multiple files
 
 License
 -------

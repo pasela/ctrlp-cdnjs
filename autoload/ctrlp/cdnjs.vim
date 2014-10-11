@@ -9,6 +9,9 @@ endif
 if !exists('g:ctrlp_cdnjs_script_type')
   let g:ctrlp_cdnjs_script_type = 1
 endif
+if !exists('g:ctrlp_cdnjs_css_type')
+  let g:ctrlp_cdnjs_css_type = 1
+endif
 
 let s:protocol = [
 \   ['protocol-less', ''      ],
@@ -33,12 +36,19 @@ else
   let g:ctrlp_ext_vars = [s:cdnjs_var]
 endif
 
-function! s:create_tag(name, content, attrs)
+function! s:create_tag(name, content, attrs, close_style)
   let tag_attrs = [a:name]
   if !empty(a:attrs)
     let tag_attrs = extend(tag_attrs, a:attrs)
   endif
-  return printf('<%s>%s</%s>', join(tag_attrs, ' '), a:content, a:name)
+
+  if len(a:content) == 0 && a:close_style == 'empty'
+    return printf('<%s />', join(tag_attrs, ' '))
+  elseif len(a:content) == 0 && a:close_style == 'omit'
+    return printf('<%s>', join(tag_attrs, ' '))
+  else
+    return printf('<%s>%s</%s>', join(tag_attrs, ' '), a:content, a:name)
+  endif
 endfunction
 
 function! s:create_script_tag(url)
@@ -46,7 +56,22 @@ function! s:create_script_tag(url)
   if g:ctrlp_cdnjs_script_type
     let attrs = insert(attrs, 'type="text/javascript"')
   endif
-  return s:create_tag('script', '', attrs)
+  return s:create_tag('script', '', attrs, '')
+endfunction
+
+function! s:create_css_link_tag(url)
+  let attrs = [
+  \   'rel="stylesheet"',
+  \   printf('href="%s"', a:url),
+  \]
+  if g:ctrlp_cdnjs_css_type
+    let attrs = insert(attrs, 'type="text/css"', 1)
+  endif
+  return s:create_tag('link', '', attrs, 'empty')
+endfunction
+
+function! s:get_ext(url)
+  return fnamemodify(a:url, ':e')
 endfunction
 
 function! s:compare_libname(lib1, lib2)
@@ -73,7 +98,12 @@ function! ctrlp#cdnjs#accept(mode, str)
 
   let url = substitute(library.latest, '^http:', s:protocol[g:ctrlp_cdnjs_protocol][1], '')
   if a:mode == 't'
-    let tag = s:create_script_tag(url)
+    let ext = s:get_ext(url)
+    if ext ==? 'js'
+      let tag = s:create_script_tag(url)
+    elseif ext ==? 'css'
+      let tag = s:create_css_link_tag(url)
+    endif
 
     call append(line('.'), tag)
     let curpos     = copy(s:curpos)
