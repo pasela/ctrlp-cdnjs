@@ -3,6 +3,10 @@ if get(g:, 'loaded_ctrlp_cdnjs', 0)
 endif
 let g:loaded_ctrlp_cdnjs = 1
 
+if !exists('g:ctrlp_cdnjs_https')
+  let g:ctrlp_cdnjs_https = 0
+endif
+
 let s:cdnjs_var = {
 \  'init':   'ctrlp#cdnjs#init()',
 \  'exit':   'ctrlp#cdnjs#exit()',
@@ -32,10 +36,19 @@ function! ctrlp#cdnjs#init()
 endfunc
 
 function! ctrlp#cdnjs#accept(mode, str)
+  if a:mode == 'h'
+    let g:ctrlp_cdnjs_https = !g:ctrlp_cdnjs_https
+    echo g:ctrlp_cdnjs_https ? 'https' : 'http'
+    return
+  endif
+
   let library = filter(copy(s:list), 'v:val.name == split(a:str)[0]')[0]
   call ctrlp#exit()
 
   let url = library.latest
+  if g:ctrlp_cdnjs_https
+    let url = substitute(url, '^http', 'https', '')
+  endif
 
   let reg_x = getreg('x', 1, 1)
   let reg_x_type = getregtype('x')
