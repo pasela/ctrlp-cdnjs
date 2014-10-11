@@ -79,6 +79,18 @@ function! s:insert_tag(url)
   endif
 endfunction
 
+function! s:open_library_page(library)
+  try
+    let url = 'https://cdnjs.com/libraries/' . a:library.name
+    call openbrowser#open(url)
+  catch
+    echohl ErrorMsg
+    echo "openbrowser not found"
+    echo "See: https://github.com/tyru/open-browser.vim"
+    echohl None
+  endtry
+endfunction
+
 function! s:compare_libname(lib1, lib2)
   return a:lib1.name ==? a:lib2.name ? 0 : a:lib1.name >? a:lib2.name ? 1 : -1
 endfunction
@@ -104,6 +116,8 @@ function! ctrlp#cdnjs#accept(mode, str)
   let url = substitute(library.latest, '^http:', s:protocol[g:ctrlp_cdnjs_protocol][1], '')
   if a:mode == 't'
     call s:insert_tag(url)
+  elseif a:mode == 'v'
+    call s:open_library_page(library)
   else
     call s:insert_url(url)
   endif
