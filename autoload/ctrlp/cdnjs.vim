@@ -6,6 +6,9 @@ let g:loaded_ctrlp_cdnjs = 1
 if !exists('g:ctrlp_cdnjs_protocol')
   let g:ctrlp_cdnjs_protocol = 1
 endif
+if !exists('g:ctrlp_cdnjs_script_type')
+  let g:ctrlp_cdnjs_script_type = 1
+endif
 
 let s:protocol = [
 \   ['protocol-less', ''      ],
@@ -57,7 +60,12 @@ function! ctrlp#cdnjs#accept(mode, str)
   let reg_x_type = getregtype('x')
 
   if a:mode == 't'
-    let url = printf('<script type="text/javascript" src="%s"></script>', url)
+    if g:ctrlp_cdnjs_script_type
+      let attr = printf('type="text/javascript" src="%s"', url)
+    else
+      let attr = printf('src="%s"', url)
+    endif
+    let url = printf('<script %s></script>', attr)
     call setreg('x', url, 'l')
     execute 'normal! "xp'
   else

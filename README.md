@@ -35,6 +35,9 @@ Variables
     1 = http
     2 = https
 
+`g:ctrlp_cdnjs_script_type` specifies whether to include
+`type="text/javascript"` in the script tag. (default=1)
+
 Requirements
 ------------
 
