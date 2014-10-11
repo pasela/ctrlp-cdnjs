@@ -21,12 +21,6 @@ Requirements
 
 - [webapi](https://github.com/mattn/webapi-vim)
 
-ToDo
-----
-
-- Choose raw URL or script tag
-- Choose http or https (or protocol-less)
-
 License
 -------
 
