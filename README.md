@@ -68,6 +68,7 @@ ToDo
 - Select version
 - Multiple asset files
 - Multiple select
+- Cache control
 
 Thanks
 ------
