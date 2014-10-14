@@ -4,6 +4,8 @@ ctrlp-cdnjs
 CtrlP extension for `cdnjs.com`.
 Select and insert the library URL/tag.
 
+![screenshot](http://f.st-hatena.com/images/fotolife/p/pasela/20141014/20141014234728.gif)
+
 Usage
 -----
 
